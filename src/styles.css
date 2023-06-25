@@ -6,4 +6,11 @@
     html {
         @apply bg-[#0d1018] text-white;
     }
+
+    .debug {
+        border: 1px solid cyan;
+    }
+    .debug > * {
+        border: 1px solid magenta;
+    }
 }
