@@ -1,26 +1,33 @@
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import { invoke } from "@tauri-apps/api/tauri";
 //import { download } from "tauri-plugin-upload-api";
 import { fs, os } from "@tauri-apps/api";
+import TaskIcon from "./TaskIcon.vue";
+import { InstallationTask, QuakeInstallation, TaskResult, TaskStatus } from "./types";
 
-const greetMsg = ref("");
 const downloadMsg = ref("click to download ezQuake");
-const name = ref("");
 const progressRef = ref({
   totalProgress: 0,
   totalBytes: 0,
 })
 
-const pakDirPath = ref({  });
 
-onMounted(async () => {
-  pakDirPath.value = await invoke("get_quake_info", { needle: "pak0.pak" });
-})
+const infoTask = ref<InstallationTask>({
+  status: TaskStatus.IDLE,
+  outcome: TaskResult.UNDEFINED,
+  result: {
+    pak0_path: "",
+    root_dir_path: "",
+  }
+});
 
-async function greet() {
-  // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-  greetMsg.value = await invoke("greet", { name: name.value });
+async function onGetInfoClick() {
+  infoTask.value.status = TaskStatus.IN_PROGRESS;
+  const result: QuakeInstallation = await invoke("get_quake_info", { needle: "pak0.pak" });
+  infoTask.value.result = result;
+  infoTask.value.status = TaskStatus.COMPLETED;
+  infoTask.value.outcome = result.pak0_path.length > 0 ? TaskResult.SUCCESS : TaskResult.FAIL;
 }
 
 async function downloadEzQuake() {
@@ -53,18 +60,15 @@ function bytesInMb(bytes: number): string {
 </script>
 
 <template>
-  <form class="row" @submit.prevent="greet">
-    <input id="greet-input" v-model="name" class="border-2 p-2 text-black" placeholder="Enter a name..." />
-    <button class="bg-gray-400 p-2" type="submit">Greet</button>
-  </form>
+  <div>
 
-  <p>{{ greetMsg }}</p>
+    <button class="bg-sky-600 text-white rounded p-3" @click="onGetInfoClick">Find Quake Installation</button>
 
-  <hr class="my-6">
+    <hr class="my-2">
 
-  <pre>
-  QuakeDirPath: {{ pakDirPath }}
-  </pre>
+    <TaskIcon :task="infoTask" />
+    <span class="font-bold">QuakeDirPath</span>: <span class="font-mono">{{ infoTask.result.pak0_path }}</span>
+  </div>
 
   <hr class="my-6">
 
@@ -72,7 +76,7 @@ function bytesInMb(bytes: number): string {
   {{ downloadMsg }}
 
   <hr class="my-6">
-  {{ pakDirPath }}
+  {{ infoTask }}
   <hr class="my-6">
   {{ bytesInMb(progressRef.totalProgress) }} of {{ bytesInMb(progressRef.totalBytes) }}
 </template>

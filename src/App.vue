@@ -6,7 +6,7 @@ import Debug from "./components/Debug.vue";
 <template>
   <div class="container border-4 border-red-400">
 
-    <div class="flex items-center p-12 space-x-4 debug">
+    <div class="flex items-center p-4 space-x-4">
       <img alt="anyquake" class="h-24" src="/assets/img/quake_ranger.jpg" />
       <div>
         <h1 class="font-bold text-4xl">Welcome to anyquake!</h1>
