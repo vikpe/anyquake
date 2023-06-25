@@ -1,10 +1,10 @@
 [package]
 name = "anyquake"
-version = "0.0.0"
-description = "A Tauri App"
-authors = ["you"]
-license = ""
-repository = ""
+version = "0.1.0"
+description = "Cross-platform installer for Quake clients and servers."
+authors = ["Viktor Persson"]
+license = "MIT"
+repository = "https://github.com/vikpe/anyquake"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
