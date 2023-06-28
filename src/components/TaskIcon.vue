@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import classNames from "classnames";
-import { Task, TaskResult, TaskStatus } from "./types";
+import { Task, TaskOutcome, TaskStatus } from "./types";
 
 interface Props {
   task: Task
@@ -21,7 +21,7 @@ const icons = {
   <img :src="classNames({
   [icons.idle]: task.status === TaskStatus.IDLE,
   [icons.inProgress]: task.status === TaskStatus.IN_PROGRESS,
-  [icons.success]: task.outcome === TaskResult.SUCCESS,
-  [icons.fail]: task.outcome === TaskResult.FAIL
+  [icons.success]: task.outcome === TaskOutcome.SUCCESS,
+  [icons.fail]: task.outcome === TaskOutcome.FAIL
   })" class="inline mr-2" height="32" width="32">
 </template>

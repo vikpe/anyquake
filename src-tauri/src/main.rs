@@ -7,14 +7,11 @@ use crate::qutil::QuakeInstallation;
 
 mod qutil;
 
+
 #[tauri::command]
 fn get_quake_info() -> Value {
-    let installation: QuakeInstallation = qutil::get_installation();
-
-    return json!({
-        "pak0_path": installation.pak0_path,
-        "root_dir_path": installation.root_dir_path,
-    });
+    let installations: Vec<QuakeInstallation> = qutil::get_installations();
+    return json!(installations);
 }
 
 

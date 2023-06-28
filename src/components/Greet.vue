@@ -4,7 +4,7 @@ import { invoke } from "@tauri-apps/api/tauri";
 //import { download } from "tauri-plugin-upload-api";
 import { fs, os } from "@tauri-apps/api";
 import TaskIcon from "./TaskIcon.vue";
-import { InstallationTask, QuakeInstallation, TaskResult, TaskStatus } from "./types";
+import { InstallationTask, QuakeInstallation, TaskOutcome, TaskStatus } from "./types";
 
 const downloadMsg = ref("click to download ezQuake");
 const progressRef = ref({
@@ -15,19 +15,16 @@ const progressRef = ref({
 
 const infoTask = ref<InstallationTask>({
   status: TaskStatus.IDLE,
-  outcome: TaskResult.UNDEFINED,
-  result: {
-    pak0_path: "",
-    root_dir_path: "",
-  }
+  outcome: TaskOutcome.UNDEFINED,
+  data: []
 });
 
 async function onGetInfoClick() {
   infoTask.value.status = TaskStatus.IN_PROGRESS;
-  const result: QuakeInstallation = await invoke("get_quake_info", { needle: "pak0.pak" });
-  infoTask.value.result = result;
+  const result: QuakeInstallation[] = await invoke("get_quake_info", { needle: "pak0.pak" });
+  infoTask.value.data = result;
   infoTask.value.status = TaskStatus.COMPLETED;
-  infoTask.value.outcome = result.pak0_path.length > 0 ? TaskResult.SUCCESS : TaskResult.FAIL;
+  infoTask.value.outcome = result.length > 0 ? TaskOutcome.SUCCESS : TaskOutcome.FAIL;
 }
 
 async function downloadEzQuake() {
@@ -62,12 +59,12 @@ function bytesInMb(bytes: number): string {
 <template>
   <div>
 
-    <button class="bg-sky-600 text-white rounded p-3" @click="onGetInfoClick">Find Quake Installation</button>
+    <button class="bg-sky-600 text-white rounded p-3" @click="onGetInfoClick">Find Quake Installations</button>
 
     <hr class="my-2">
 
     <TaskIcon :task="infoTask" />
-    <span class="font-bold">QuakeDirPath</span>: <span class="font-mono">{{ infoTask.result.pak0_path }}</span>
+    <span class="font-bold">QuakeDirPath</span>: <span class="font-mono">{{ infoTask.data.pak0_path }}</span>
   </div>
 
   <hr class="my-6">
