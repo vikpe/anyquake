@@ -1,23 +1,23 @@
 export enum TaskStatus {
-    IDLE,
-    IN_PROGRESS,
-    COMPLETED,
+    IDLE = "IDLE",
+    IN_PROGRESS = "IN_PROGRESS",
+    COMPLETED = "COMPLETED",
 }
 
-export enum TaskResult {
-    UNDEFINED,
-    SUCCESS,
-    FAIL
+export enum TaskOutcome {
+    UNDEFINED = "UNDEFINED",
+    SUCCESS = "SUCCESS",
+    FAIL = "FAIL"
 }
 
 export interface Task {
     status: TaskStatus;
-    outcome: TaskResult;
-    result: any;
+    outcome: TaskOutcome;
+    data: any;
 }
 
 export interface InstallationTask extends Task {
-    result: QuakeInstallation
+    data: QuakeInstallation[]
 }
 
 export interface QuakeInstallation {
