@@ -1,5 +1,5 @@
 [package]
-name = "anyquake"
+name = "anyquake-gui"
 version = "0.1.0"
 description = "Cross-platform installer for Quake clients and servers."
 authors = ["Viktor Persson"]
@@ -13,7 +13,7 @@ edition = "2021"
 tauri-build = { version = "1.4", features = [] }
 
 [dependencies]
-tauri = { version = "1.4", features = [ "fs-all", "os-all", "shell-open"] }
+tauri = { version = "1.4", features = ["fs-all", "os-all", "shell-open"] }
 tauri-plugin-fs-extra = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
 tauri-plugin-upload = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
 tauri-plugin-window-state = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
