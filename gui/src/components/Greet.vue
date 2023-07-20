@@ -64,7 +64,7 @@ function bytesInMb(bytes: number): string {
     <hr class="my-2">
 
     <TaskIcon :task="infoTask" />
-    <span class="font-bold">QuakeDirPath</span>: <span class="font-mono">{{ infoTask.data.pak0_path }}</span>
+    <span class="font-bold">QuakeDirPath</span>: <span class="font-mono">{{ JSON.stringify(infoTask.data, null, 2) }}</span>
   </div>
 
   <hr class="my-6">
