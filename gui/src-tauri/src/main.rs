@@ -5,15 +5,13 @@ use serde_json::{json, Value};
 
 use anyquake_core::add;
 
-use crate::qutil::QuakeInstallation;
-
 mod qutil;
 
 
 #[tauri::command]
 fn get_quake_info() -> Value {
     println!("elo: {}", add(1, 2));
-    let installations: Vec<QuakeInstallation> = qutil::get_installations();
+    let installations: Vec<qutil::QuakeInstallation> = qutil::get_installations();
     return json!(installations);
 }
 
