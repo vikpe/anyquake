@@ -1,4 +1,4 @@
-use crate::module::{Module, ModuleInfo};
+use crate::modules::{Module, ModuleInfo};
 
 pub struct AfterQuake {}
 
