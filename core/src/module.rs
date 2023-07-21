@@ -1,6 +1,3 @@
-pub mod afterquake;
-pub mod ezquake;
-
 pub trait Module {
     fn info(&self) -> ModuleInfo;
     fn is_installed(&self) -> bool;
