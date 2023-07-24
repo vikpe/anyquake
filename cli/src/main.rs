@@ -28,6 +28,14 @@ fn main() {
         Some(Commands::Install { module: name }) => {
             if let Some(module) = modules.by_id(String::from(name)) {
                 println!("Install {}[{}]!", name, module.info().id);
+                match module.install() {
+                    Err(e) => {
+                        println!("{:?}", e);
+                    }
+                    Ok(m) => {
+                        println!("{:?}", m);
+                    }
+                }
             } else {
                 println!("Module is {} not supported", name);
                 println!("Supported modules: {}", modules.names().join(", "));

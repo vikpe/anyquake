@@ -22,4 +22,8 @@ impl ModuleLike for EzQuake {
             repo: String::from("https://github.com/QW-Group/ezquake-source"),
         };
     }
+
+    fn install(&self) -> Result<(), String> {
+        aq_write_file(&PathBuf::from("eh"), "ezquake2.txt", "hello")
+    }
 }
