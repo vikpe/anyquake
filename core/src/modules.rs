@@ -24,24 +24,18 @@ pub struct ModuleCollection {
     pub ezquake: EzQuake,
 }
 
-impl Default for ModuleCollection {
-    fn default() -> ModuleCollection {
-        ModuleCollection {
-            afterquake: afterquake::AfterQuake,
-            ezquake: ezquake::EzQuake,
-        }
-    }
-}
-
 impl ModuleCollection {
     pub fn new() -> Self {
-        ModuleCollection { ..Default::default() }
+        ModuleCollection {
+            afterquake: AfterQuake,
+            ezquake: EzQuake,
+        }
     }
 
     pub fn all(&self) -> Vec<Box<dyn ModuleLike>> {
         vec![
-            Box::new(self.afterquake.clone()),
-            Box::new(self.ezquake.clone()),
+            Box::new(AfterQuake),
+            Box::new(EzQuake),
         ]
     }
 
