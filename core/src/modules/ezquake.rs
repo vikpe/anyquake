@@ -1,3 +1,8 @@
+extern crate dirs;
+
+use std::path::PathBuf;
+
+use crate::afs::aq_write_file;
 use crate::modules::{ModuleInfo, ModuleLike};
 
 #[derive(Clone)]

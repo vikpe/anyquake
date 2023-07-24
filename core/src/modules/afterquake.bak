@@ -17,4 +17,8 @@ impl ModuleLike for AfterQuake {
             repo: String::from("todo"),
         };
     }
+
+    fn install(&self) -> Result<String, String> {
+        todo!()
+    }
 }
