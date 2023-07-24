@@ -7,20 +7,20 @@ pub struct DefaultModules {
 
 impl DefaultModules {
     pub fn new() -> DefaultModules {
-        return DefaultModules {
+        DefaultModules {
             afterquake: afterquake::AfterQuake {},
             ezquake: ezquake::EzQuake {},
-        };
+        }
     }
 
     pub fn all(&self) -> Vec<Box<dyn ModuleLike>> {
-        return vec![
+        vec![
             Box::new(self.afterquake.clone()),
             Box::new(self.ezquake.clone()),
-        ];
+        ]
     }
 
     pub fn names(&self) -> Vec<String> {
-        self.all().into_iter().map(|e| e.info().name).collect()
+        self.all().into_iter().map(|m| m.info().name).collect()
     }
 }
