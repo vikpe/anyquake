@@ -1,7 +1,7 @@
 use crate::modules::{ModuleInfo, ModuleLike};
 
 #[derive(Clone)]
-pub struct EzQuake {}
+pub struct EzQuake;
 
 impl ModuleLike for EzQuake {
     fn is_installed(&self) -> bool {

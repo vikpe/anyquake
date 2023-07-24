@@ -1,13 +1,13 @@
-use crate::module_collection::DefaultModules;
+use crate::modules::ModuleCollection;
 
 pub struct App {
-    pub modules: DefaultModules,
+    pub modules: ModuleCollection,
 }
 
 
 pub fn create_app() -> App {
     let app = App {
-        modules: DefaultModules::new()
+        modules: ModuleCollection::new(),
     };
     return app;
 }

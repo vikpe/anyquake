@@ -26,34 +26,39 @@ fn main() {
 
     match &cli.command {
         Some(Commands::Install { module: name }) => {
-            // if not installed
-            println!("Install: {}", name);
-
-            // else
-            // print info
+            if let Some(module) = app.modules.by_id(String::from(name)) {
+                println!("Install {}[{}]!", name, module.info().id);
+            } else {
+                println!("Module is {} not supported", name);
+                println!("Supported modules: {}", app.modules.names().join(", "));
+            }
         }
         Some(Commands::Uninstall { module: name }) => {
-            // if installed
-            println!("Uninstall: {}", name);
+            if let Some(module) = app.modules.by_id(String::from(name)) {
+                println!("Uninstall {}[{}]!", name, module.info().id);
+            } else {
+                println!("Module is {} not installed", name);
+                let installed_modules: Vec<String> = app.modules.into_iter().filter(|m| m.is_installed()).map(|m| m.info().name).collect();
 
-            // else
-            // print info
+                println!("Installed modules: {}", installed_modules.join(", "));
+            }
         }
         Some(Commands::List {}) => {
-            app.modules.all().into_iter()
+            app.modules.into_iter()
                 .filter(|m| m.is_installed())
                 .for_each(|m| {
                     println!("{} [{}]", m.info().name, m.info().id);
                     println!("* installed: {}", m.is_installed());
-                    println!()
                 });
 
-            for n in app.modules.names() {
-                println!("{}", n);
+            println!("\napp.modules.names()");
+            for name in app.modules.names() {
+                println!("{}", name);
             }
 
-            if let Some(foo) = app.modules.by_id(String::from("ezquake")) {
-                println!("{}", foo.info().name)
+            println!("\napp.modules.by_id()");
+            if let Some(module) = app.modules.by_id(String::from("ezquake")) {
+                println!("{}", module.info().name)
             }
         }
         None => {}
