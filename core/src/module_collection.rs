@@ -23,4 +23,8 @@ impl DefaultModules {
     pub fn names(&self) -> Vec<String> {
         self.all().into_iter().map(|m| m.info().name).collect()
     }
+
+    pub fn by_id(&self, id: String) -> Option<Box<dyn ModuleLike>> {
+        self.all().into_iter().find(|m| m.info().id == id)
+    }
 }
