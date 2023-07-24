@@ -1,8 +1,9 @@
-use crate::modules::{Module, ModuleInfo};
+use crate::modules::{ModuleInfo, ModuleLike};
 
-pub struct AfterQuake {}
+#[derive(Clone)]
+pub struct AfterQuake;
 
-impl Module for AfterQuake {
+impl ModuleLike for AfterQuake {
     fn is_installed(&self) -> bool {
         true
     }

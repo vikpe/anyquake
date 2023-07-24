@@ -1,8 +1,9 @@
-use crate::modules::{Module, ModuleInfo};
+use crate::modules::{ModuleInfo, ModuleLike};
 
+#[derive(Clone)]
 pub struct EzQuake {}
 
-impl Module for EzQuake {
+impl ModuleLike for EzQuake {
     fn is_installed(&self) -> bool {
         false
     }

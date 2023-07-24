@@ -1,6 +1,6 @@
 use clap::{Parser, Subcommand};
 
-use anyquake_core::app::create_app;
+use anyquake_core::app::{App, create_app};
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
@@ -22,7 +22,7 @@ enum Commands {
 
 fn main() {
     let cli = Cli::parse();
-    let app = create_app();
+    let app: App = create_app();
 
     match &cli.command {
         Some(Commands::Install { module: name }) => {
@@ -40,11 +40,17 @@ fn main() {
             // print info
         }
         Some(Commands::List {}) => {
-            app.modules.into_iter().for_each(|m| {
-                println!("{} [{}]", m.info().name, m.info().identifier);
-                println!("* installed: {}", m.is_installed());
-                println!()
-            });
+            app.modules.all().into_iter()
+                .filter(|m| m.is_installed())
+                .for_each(|m| {
+                    println!("{} [{}]", m.info().name, m.info().identifier);
+                    println!("* installed: {}", m.is_installed());
+                    println!()
+                });
+
+            for n in app.modules.names() {
+                println!("{}", n);
+            }
         }
         None => {}
     }
