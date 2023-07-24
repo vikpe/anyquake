@@ -43,13 +43,17 @@ fn main() {
             app.modules.all().into_iter()
                 .filter(|m| m.is_installed())
                 .for_each(|m| {
-                    println!("{} [{}]", m.info().name, m.info().identifier);
+                    println!("{} [{}]", m.info().name, m.info().id);
                     println!("* installed: {}", m.is_installed());
                     println!()
                 });
 
             for n in app.modules.names() {
                 println!("{}", n);
+            }
+
+            if let Some(foo) = app.modules.by_id(String::from("ezquake")) {
+                println!("{}", foo.info().name)
             }
         }
         None => {}

@@ -10,7 +10,7 @@ impl ModuleLike for EzQuake {
 
     fn info(&self) -> ModuleInfo {
         return ModuleInfo {
-            identifier: String::from("ezquake"),
+            id: String::from("ezquake"),
             name: String::from("EzQuake"),
             description: String::from("todo"),
             website: String::from("https://ezquake.com/"),

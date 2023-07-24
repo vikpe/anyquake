@@ -7,7 +7,7 @@ pub trait ModuleLike {
 }
 
 pub struct ModuleInfo {
-    pub identifier: String,
+    pub id: String,
     pub name: String,
     pub description: String,
     pub website: String,
