@@ -1,5 +1,7 @@
 use std::vec::IntoIter;
 
+use anyhow::Result;
+
 // use crate::modules::afterquake::AfterQuake;
 use crate::modules::ezquake::EzQuake;
 
@@ -9,7 +11,7 @@ pub mod ezquake;
 pub trait ModuleLike {
     fn info(&self) -> ModuleInfo;
     fn is_installed(&self) -> bool;
-    fn install(&self) -> Result<(), String>;
+    fn install(&self) -> Result<()>;
 }
 
 pub struct ModuleInfo {
@@ -25,11 +27,19 @@ pub struct ModuleCollection {
     pub ezquake: EzQuake,
 }
 
-impl ModuleCollection {
-    pub fn new() -> Self {
+impl Default for ModuleCollection {
+    fn default() -> Self {
         ModuleCollection {
             // afterquake: AfterQuake,
             ezquake: EzQuake,
+        }
+    }
+}
+
+impl ModuleCollection {
+    pub fn new() -> Self {
+        ModuleCollection {
+            ..Default::default()
         }
     }
 

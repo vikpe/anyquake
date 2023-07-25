@@ -1,20 +1,18 @@
-use std::path::PathBuf;
 use std::fs;
+use std::path::PathBuf;
 
-pub fn create_dir_all(path: &PathBuf) -> Result<(), String> {
-    if let Err(_) = fs::metadata(path) {
-        if let Err(err) = fs::create_dir_all(path) {
-            return Err(err.to_string());
-        }
+use anyhow::Result;
+
+pub fn create_dir_all(path: &PathBuf) -> Result<()> {
+    if fs::metadata(path).is_err() {
+        fs::create_dir_all(path)?
     }
     Ok(())
 }
 
-pub fn write_file(dir_path: PathBuf, filename: &str, content: &str) -> Result<(), String> {
+pub fn write_file(dir_path: PathBuf, filename: &str, content: &str) -> Result<()> {
     create_dir_all(&dir_path)?;
     let file_path = dir_path.join(filename);
-    if let Err(err) = fs::write(file_path, content) {
-        return Err(err.to_string());
-    }
+    fs::write(file_path, content)?;
     Ok(())
 }
