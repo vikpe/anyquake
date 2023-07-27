@@ -1,46 +1,59 @@
+use std::fs;
 use std::path::PathBuf;
 
 use anyhow::{anyhow, Result};
 
+use crate::download::download;
 use crate::fs_extra;
 
-pub struct BaseDir {
-    root: PathBuf,
+#[derive(Clone)]
+pub struct RestrictedDir {
+    pub path: PathBuf,
 }
 
-impl BaseDir {
-    pub fn new(dir_name: &str) -> Result<Self> {
-        let home_path = match dirs::home_dir() {
-            Some(path) => path,
-            None => return Err(anyhow!("Unable to locate home dir"))
-        };
-
-        Ok(BaseDir { root: home_path.join(dir_name) })
-    }
-
-    pub fn dir_path(&self, path: &PathBuf) -> PathBuf {
-        self.root.join(path)
-    }
-
-    pub fn file_path(&self, dir_path: &PathBuf, filename: &str) -> PathBuf {
-        self.root.join(dir_path).join(filename)
-    }
-
-    pub fn write_file(&self, dir_path: &PathBuf, filename: &str, content: &str) -> Result<()> {
-        fs_extra::write_file(self.dir_path(dir_path), filename, content)
-    }
+pub fn path_is_subpath_of(path: &PathBuf, parent: &PathBuf) -> bool {
+    path.starts_with(parent)
 }
 
-pub struct Assets {
-    pub dir: BaseDir,
-}
+impl RestrictedDir {
+    pub fn new(path: &PathBuf) -> Self {
+        Self { path: path.clone() }
+    }
 
-impl Assets {
-    pub fn new() -> Result<Self> {
-        let dir = match BaseDir::new("anyquake") {
-            Ok(dir) => dir,
-            Err(e) => return Err(anyhow!(e.to_string()))
-        };
-        Ok(Assets { dir })
+    pub fn validate_path(&self, path: &PathBuf) -> Result<()> {
+        match path.starts_with(&self.path) {
+            true => Ok(()),
+            false => Err(anyhow!("Path '{}' is not within the restricted dir", path.display()))
+        }
+    }
+
+    pub fn get_path_to(&self, path: &PathBuf) -> PathBuf {
+        self.path.join(path)
+    }
+
+    pub fn delete_file(&self, file_path: &PathBuf) -> Result<()> {
+        let path_rel = self.get_path_to(file_path);
+        self.validate_path(&path_rel)?;
+
+        if !path_rel.is_file() {
+            return Ok(());
+        }
+
+        fs::remove_file(path_rel)?;
+        Ok(())
+    }
+
+    pub fn create_dir(&self, path: &PathBuf) -> Result<()> {
+        let path_rel = self.get_path_to(path);
+        self.validate_path(&path_rel)?;
+
+        fs_extra::create_dir_all(&path_rel)
+    }
+
+    pub async fn download(&self, url: &str, dest: &PathBuf) -> Result<()> {
+        let dest_rel = self.get_path_to(dest);
+        self.validate_path(&dest_rel)?;
+
+        download(&url, &dest_rel).await
     }
 }

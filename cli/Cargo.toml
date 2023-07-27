@@ -9,4 +9,5 @@ edition = "2021"
 anyhow = "1.0.72"
 anyquake_core = { path = "../core" }
 clap = { version = "4.3.17", features = ["derive"] }
+prettytable-rs = "0.10.0"
 tokio = { version = "1", features = ["full"] }

@@ -67,6 +67,7 @@ name = "anyquake_core"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "async-trait",
  "dirs 5.0.1",
  "futures-util",
  "reqwest",
@@ -87,6 +88,17 @@ dependencies = [
  "tauri-plugin-fs-extra",
  "tauri-plugin-upload",
  "tauri-plugin-window-state",
+]
+
+[[package]]
+name = "async-trait"
+version = "0.1.72"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cc6dde6e4ed435a4c1ee4e73592f5ba9da2151af10076cc04858746af9352d09"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.27",
 ]
 
 [[package]]

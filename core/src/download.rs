@@ -1,32 +1,23 @@
 use std::cmp::min;
 use std::fs::File;
 use std::io::Write;
-use std::path::Path;
+use std::path::PathBuf;
 
 use anyhow::{anyhow, Result};
 use futures_util::StreamExt;
-
-pub enum Dest<T> {
-    File(T),
-    Dir(T),
-}
 
 pub fn url_to_filename(url: &str) -> &str {
     url.split('/').last().unwrap()
 }
 
-pub async fn download(url: &str, dest: Dest<impl AsRef<Path>>) -> Result<()> {
+pub async fn download(url: &str, dest: &PathBuf) -> Result<()> {
     let client = reqwest::Client::new();
     let response = client.get(url).send().await?;
 
-    let file_path: String = match dest {
-        Dest::File(path) => path.as_ref().to_str().unwrap().to_string(),
-        Dest::Dir(path) => {
-            let filename = url_to_filename(url);
-            format!("{}/{}", path.as_ref().to_str().unwrap().to_string(), filename)
-        }
+    let file_path: PathBuf = match dest.is_dir() {
+        true => dest.join(url_to_filename(url)),
+        false => dest.clone(),
     };
-
     let mut file = File::create(file_path)?;
     let content = response.bytes().await?;
     file.write_all(&content)?;

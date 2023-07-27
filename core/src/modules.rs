@@ -1,17 +1,21 @@
 use std::vec::IntoIter;
 
 use anyhow::Result;
+use async_trait::async_trait;
 
+use crate::assets::RestrictedDir;
 // use crate::modules::afterquake::AfterQuake;
 use crate::modules::ezquake::EzQuake;
 
-//pub mod afterquake;
 pub mod ezquake;
 
+#[async_trait]
 pub trait ModuleLike {
     fn info(&self) -> ModuleInfo;
     fn is_installed(&self) -> bool;
-    fn install(&self) -> Result<()>;
+    async fn install(&self) -> Result<()>;
+    fn uninstall(&self) -> Result<()>;
+    fn dir(&self) -> &RestrictedDir;
 }
 
 pub struct ModuleInfo {
@@ -23,30 +27,22 @@ pub struct ModuleInfo {
 }
 
 pub struct ModuleCollection {
-    // pub afterquake: AfterQuake,
     pub ezquake: EzQuake,
 }
 
-impl Default for ModuleCollection {
-    fn default() -> Self {
-        ModuleCollection {
-            // afterquake: AfterQuake,
-            ezquake: EzQuake,
-        }
-    }
-}
 
 impl ModuleCollection {
     pub fn new() -> Self {
         ModuleCollection {
-            ..Default::default()
+            // afterquake: AfterQuake,
+            ezquake: EzQuake::new(),
         }
     }
 
     pub fn all(&self) -> Vec<Box<dyn ModuleLike>> {
         vec![
             // Box::new(AfterQuake),
-            Box::new(EzQuake),
+            Box::new(EzQuake::new()),
         ]
     }
 
