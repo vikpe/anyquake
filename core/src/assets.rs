@@ -32,12 +32,12 @@ impl RestrictedDir {
     }
 
     pub fn delete_file(&self, file_path: &PathBuf) -> Result<()> {
-        let path_rel = self.get_path_to(file_path);
-        self.validate_path(&path_rel)?;
-
-        if !path_rel.is_file() {
+        if !self.has_file(file_path) {
             return Ok(());
         }
+
+        let path_rel = self.get_path_to(file_path);
+        self.validate_path(&path_rel)?;
 
         fs::remove_file(path_rel)?;
         Ok(())
