@@ -80,6 +80,7 @@ dependencies = [
  "futures-util",
  "reqwest",
  "serde_json",
+ "tokio",
 ]
 
 [[package]]
