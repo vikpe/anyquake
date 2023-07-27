@@ -4,7 +4,6 @@ use std::io::Write;
 use std::path::Path;
 
 use anyhow::{anyhow, Result};
-use futures_util::future::join_all;
 use futures_util::StreamExt;
 
 pub enum Dest<T> {
@@ -16,7 +15,7 @@ pub fn url_to_filename(url: &str) -> &str {
     url.split('/').last().unwrap()
 }
 
-pub async fn download_file(url: &str, dest: Dest<impl AsRef<Path>>) -> Result<()> {
+pub async fn download(url: &str, dest: Dest<impl AsRef<Path>>) -> Result<()> {
     let client = reqwest::Client::new();
     let response = client.get(url).send().await?;
 
@@ -35,31 +34,31 @@ pub async fn download_file(url: &str, dest: Dest<impl AsRef<Path>>) -> Result<()
     Ok(())
 }
 
-pub async fn download_files(urls: Vec<(&str, &str)>) -> Result<()> {
-    let tasks = urls.into_iter().map(|(url, file_path)| download_file(url, Dest::File(file_path)));
-    let results = join_all(tasks).await;
-
-    for result in results {
-        if let Err(e) = result {
-            eprintln!("Error while downloading file: {:?}", e);
-        }
-    }
-
-    Ok(())
-}
-
-pub async fn download_files_to_dir(file_urls: Vec<&str>, dir_path: &str) -> Result<()> {
-    let tasks = file_urls.into_iter().map(|url| download_file(url, Dest::Dir(dir_path)));
-    let results = join_all(tasks).await;
-
-    for result in results {
-        if let Err(e) = result {
-            eprintln!("Error while downloading file: {:?}", e);
-        }
-    }
-
-    Ok(())
-}
+// pub async fn download_files(urls: Vec<(&str, Dest<impl AsRef<Path>>)>) -> Result<()> {
+//     let tasks = urls.into_iter().map(|(url, dest)| download_file(url, dest));
+//     let results = join_all(tasks).await;
+//
+//     for result in results {
+//         if let Err(e) = result {
+//             eprintln!("Error while downloading file: {:?}", e);
+//         }
+//     }
+//
+//     Ok(())
+// }
+//
+// pub async fn download_files_to_dir(file_urls: Vec<&str>, dir_path: &str) -> Result<()> {
+//     let tasks = file_urls.into_iter().map(|url| download_file(url, Dest::Dir(dir_path)));
+//     let results = join_all(tasks).await;
+//
+//     for result in results {
+//         if let Err(e) = result {
+//             eprintln!("Error while downloading file: {:?}", e);
+//         }
+//     }
+//
+//     Ok(())
+// }
 
 pub async fn download_file_with_progress(
     url: &str,
