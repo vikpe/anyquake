@@ -11,10 +11,6 @@ pub struct RestrictedDir {
     pub path: PathBuf,
 }
 
-pub fn path_is_subpath_of(path: &PathBuf, parent: &PathBuf) -> bool {
-    path.starts_with(parent)
-}
-
 impl RestrictedDir {
     pub fn new(path: &PathBuf) -> Self {
         Self { path: path.clone() }
@@ -29,6 +25,10 @@ impl RestrictedDir {
 
     pub fn get_path_to(&self, path: &PathBuf) -> PathBuf {
         self.path.join(path)
+    }
+
+    pub fn has_file(&self, path: &PathBuf) -> bool {
+        self.get_path_to(path).is_file()
     }
 
     pub fn delete_file(&self, file_path: &PathBuf) -> Result<()> {

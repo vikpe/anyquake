@@ -1,10 +1,10 @@
 extern crate dirs;
 
-use std::fs::metadata;
 use std::path::PathBuf;
 
 use anyhow::{anyhow, Result};
 use async_trait::async_trait;
+use futures_util::future::join_all;
 
 use crate::assets::RestrictedDir;
 use crate::modules::{ModuleInfo, ModuleLike};
@@ -17,6 +17,7 @@ pub struct EzQuake {
     website: String,
     repo: String,
     dir: RestrictedDir,
+    asset_list: Vec<String>,
 }
 
 impl EzQuake {
@@ -30,6 +31,10 @@ impl EzQuake {
             website: String::from("https://ezquake.com/"),
             repo: String::from("https://github.com/QW-Group/ezquake-source"),
             dir: RestrictedDir::new(&anyquake_path.join("ezquake")),
+            asset_list: vec![
+                String::from("https://raw.githubusercontent.com/vikpe/qw-data/main/github/ezquake_releases.json"),
+                String::from("https://raw.githubusercontent.com/vikpe/qw-data/main/github/ktx_latest_release.json"),
+            ],
         }
     }
 }
@@ -51,9 +56,7 @@ impl ModuleLike for EzQuake {
     }
 
     fn is_installed(&self) -> bool {
-        let file_path = self.dir.path.join("ezquake_releases.json");
-        println!("{:?}", file_path);
-        metadata(file_path).is_ok()
+        self.dir.has_file(&PathBuf::from("ezquake_releases.json"))
     }
 
     async fn install(&self) -> Result<()> {
@@ -61,9 +64,17 @@ impl ModuleLike for EzQuake {
             return Err(anyhow!("{} is already installed", self.info().name));
         }
 
-        let url = String::from("https://raw.githubusercontent.com/vikpe/qw-data/main/github/ezquake_releases.json");
+        let dest = PathBuf::from(".");
+        let tasks = self.asset_list.iter().map(|url| self.dir.download(&url, &dest));
+        let result = join_all(tasks).await;
 
-        self.dir.download(&url, &PathBuf::from("ezquake_releases.json")).await
+        for result in result {
+            if let Err(e) = result {
+                eprintln!("Error while downloading file: {:?}", e);
+            }
+        }
+
+        Ok(())
     }
 
     fn uninstall(&self) -> Result<()> {

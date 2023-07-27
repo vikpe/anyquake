@@ -11,11 +11,11 @@ pub mod ezquake;
 
 #[async_trait]
 pub trait ModuleLike {
+    fn dir(&self) -> &RestrictedDir;
     fn info(&self) -> ModuleInfo;
     fn is_installed(&self) -> bool;
     async fn install(&self) -> Result<()>;
     fn uninstall(&self) -> Result<()>;
-    fn dir(&self) -> &RestrictedDir;
 }
 
 pub struct ModuleInfo {
