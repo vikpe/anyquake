@@ -94,3 +94,52 @@ async fn main() {
         println!("Download complete!");
     }
 }
+
+
+// ##########################################
+use std::error::Error;
+use std::fs::File;
+use tokio::fs;
+use tokio::io::AsyncWriteExt;
+use tokio::time::Duration;
+use reqwest::Client;
+use futures::future::join_all;
+
+async fn download_file(url: &str, file_path: &str) -> Result<(), Box<dyn Error>> {
+    let client = Client::new();
+    let response = client.get(url).send().await?;
+
+    let mut dest = File::create(file_path).await?;
+    let content = response.bytes().await?;
+
+    dest.write_all(&content).await?;
+
+    Ok(())
+}
+
+async fn download_files_async(file_urls: Vec<(&str, &str)>) -> Result<(), Box<dyn Error>> {
+    let tasks = file_urls.into_iter().map(|(url, file_path)| download_file(url, file_path));
+    let results = join_all(tasks).await;
+
+    for result in results {
+        if let Err(e) = result {
+            eprintln!("Error while downloading file: {:?}", e);
+        }
+    }
+
+    Ok(())
+}
+
+#[tokio::main]
+async fn main() {
+    // List of URLs and corresponding file paths
+    let file_urls = vec![
+        ("https://example.com/file1.txt", "file1.txt"),
+        ("https://example.com/file2.txt", "file2.txt"),
+        // Add more URLs and file paths here as needed
+    ];
+
+    if let Err(e) = download_files_async(file_urls).await {
+        eprintln!("Error during async download: {:?}", e);
+    }
+}
