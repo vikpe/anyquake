@@ -1,3 +1,41 @@
+pub struct Manifest {
+    pub name: String,
+    pub version: String,
+    pub authors: Vec<String>,
+    pub license: String,
+    pub description: String,
+    pub keywords: Vec<String>,
+    pub homepage: Option<String>,
+    pub documentation: Option<String>,
+    pub repository: Option<String>,
+    pub readme: Option<String>,
+    pub readme_file: Option<String>,
+    pub edition: Option<String>,
+    pub build: Option<String>,
+    pub links: Option<String>,
+    pub exclude: Vec<String>,
+    pub include: Vec<String>,
+    pub publish: Option<Vec<String>>,
+    pub metadata: HashMap<String, toml::Value>,
+    pub target: Option<HashMap<String, Target>>,
+    pub lib: Option<Lib>,
+    pub bin: Option<Vec<Bin>>,
+    pub example: Option<Vec<Example>>,
+    pub test: Option<Vec<Test>>,
+    pub bench: Option<Vec<Bench>>,
+    pub dependencies: Option<HashMap<String, toml::Value>>,
+    pub dev_dependencies: Option<HashMap<String, toml::Value>>,
+    pub build_dependencies: Option<HashMap<String, toml::Value>>,
+    pub features: Option<HashMap<String, Vec<String>>>,
+    pub target_features: Option<HashMap<String, HashMap<String, Vec<String>>>>,
+    pub replace: Option<HashMap<String, toml::Value>>,
+    pub patch: Option<HashMap<String, HashMap<String, toml::Value>>>,
+    pub profile: Option<HashMap<String, Profile>>,
+    pub workspace: Option<Workspace>,
+    pub badges: Option<HashMap<String, Badge>>,
+}
+
+
 pub enum Status {
     Pending,
     // Queued,
@@ -10,6 +48,7 @@ pub enum Status {
     Completed,
     Failed, // Failed(reason: String),
 }
+
 
 pub struct Task {
     pub url: String,
