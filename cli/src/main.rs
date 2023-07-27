@@ -50,7 +50,11 @@ async fn main() -> Result<()> {
                 }
             } else {
                 println!("Module is {} not installed", name);
-                let installed_modules: Vec<String> = modules.into_iter().filter(|m| m.is_installed()).map(|m| m.info().name).collect();
+                let installed_modules: Vec<String> = modules
+                    .into_iter()
+                    .filter(|m| m.is_installed())
+                    .map(|m| m.info().name)
+                    .collect();
 
                 println!("Installed modules: {}", installed_modules.join(", "));
             }
