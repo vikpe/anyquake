@@ -1,14 +1,32 @@
 use std::cmp::min;
 use std::fs::File;
 use std::io::Write;
+use std::path::Path;
 
 use anyhow::{anyhow, Result};
 use futures_util::future::join_all;
 use futures_util::StreamExt;
 
-pub async fn download_file(url: &str, file_path: &str) -> Result<()> {
+pub enum Dest<T> {
+    File(T),
+    Dir(T),
+}
+
+pub fn url_to_filename(url: &str) -> &str {
+    url.split('/').last().unwrap()
+}
+
+pub async fn download_file(url: &str, dest: Dest<impl AsRef<Path>>) -> Result<()> {
     let client = reqwest::Client::new();
     let response = client.get(url).send().await?;
+
+    let file_path: String = match dest {
+        Dest::File(path) => path.as_ref().to_str().unwrap().to_string(),
+        Dest::Dir(path) => {
+            let filename = url_to_filename(url);
+            format!("{}/{}", path.as_ref().to_str().unwrap().to_string(), filename)
+        }
+    };
 
     let mut file = File::create(file_path)?;
     let content = response.bytes().await?;
@@ -17,8 +35,8 @@ pub async fn download_file(url: &str, file_path: &str) -> Result<()> {
     Ok(())
 }
 
-pub async fn download_files(file_urls: Vec<(&str, &str)>) -> Result<()> {
-    let tasks = file_urls.into_iter().map(|(url, file_path)| download_file(url, file_path));
+pub async fn download_files(urls: Vec<(&str, &str)>) -> Result<()> {
+    let tasks = urls.into_iter().map(|(url, file_path)| download_file(url, Dest::File(file_path)));
     let results = join_all(tasks).await;
 
     for result in results {
@@ -30,14 +48,8 @@ pub async fn download_files(file_urls: Vec<(&str, &str)>) -> Result<()> {
     Ok(())
 }
 
-pub async fn download_file_to_dir(url: &str, dir_path: &str) -> Result<()> {
-    let filename = url.split('/').last().unwrap();
-    let file_path = format!("{}/{}", dir_path, filename);
-    download_file(url, &file_path).await
-}
-
 pub async fn download_files_to_dir(file_urls: Vec<&str>, dir_path: &str) -> Result<()> {
-    let tasks = file_urls.into_iter().map(|url| download_file_to_dir(url, dir_path));
+    let tasks = file_urls.into_iter().map(|url| download_file(url, Dest::Dir(dir_path)));
     let results = join_all(tasks).await;
 
     for result in results {
