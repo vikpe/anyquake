@@ -1,3 +1,4 @@
+// https://freshman.tech/snippets/go/cross-compile-go-programs/
 // https://doc.rust-lang.org/reference/conditional-compilation.html
 pub fn foo() {
     let machine_kind = if cfg!(unix) {
