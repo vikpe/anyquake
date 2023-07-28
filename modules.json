@@ -11,9 +11,21 @@
                 "version": "3.6.2",
                 "url": "https://github.com/QW-Group/ezquake-source/releases/tag/3.6.2",
                 "assets": [
-                    { "os": "windows", "url": "ezquake.exe" },
-                    { "os": "linux", "url": "ezQuake-x86_64.AppImage" },
-                    { "os": "mac", "url": "ezquake.app" }
+                    {
+                        "os": "windows",
+                        "arch": "x86_64",
+                        "url": "ezquake.exe"
+                    },
+                    {
+                        "os": "linux",
+                        "arch": "x86_64",
+                        "url": "ezQuake-x86_64.AppImage"
+                    },
+                    {
+                        "os": "mac",
+                        "arch": "x86_64",
+                        "url": "ezquake.app"
+                    }
                 ]
             }
         ]
@@ -25,12 +37,7 @@
         "website": "",
         "repo": "",
         "releases_url": "",
-        "releases": [
-            {
-                "version": "1.0.0",
-                "url": ""
-            }
-        ]
+        "releases": []
     },
     "fte-client": {
         "id": "fte-client",
@@ -41,8 +48,30 @@
         "releases_url": "https://fte.triptohell.info/downloads",
         "releases": [
             {
-                "version": "1.0.0",
-                "url": ""
+                "version": "6202",
+                "url": "https://fte.triptohell.info/moodles/win32/fteqw.exe",
+                "assets": [
+                    {
+                        "os": "windows",
+                        "arch": "x86_32",
+                        "url": "https://fte.triptohell.info/moodles/win32/fteqw.exe"
+                    },
+                    {
+                        "os": "windows",
+                        "arch": "x86_64",
+                        "url": "https://fte.triptohell.info/moodles/win64/fteqw64.exe"
+                    },
+                    {
+                        "os": "linux",
+                        "arch": "x86_32",
+                        "url": "https://fte.triptohell.info/moodles/linux_x86/fteqw32"
+                    },
+                    {
+                        "os": "linux",
+                        "arch": "x86_64",
+                        "url": "https://fte.triptohell.info/moodles/linux_amd64/fteqw64"
+                    }
+                ]
             }
         ]
     }
