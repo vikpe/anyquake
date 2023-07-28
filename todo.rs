@@ -1,3 +1,5 @@
+// CRATE: https://github.com/stanislav-tkach/os_info
+
 // https://freshman.tech/snippets/go/cross-compile-go-programs/
 // https://doc.rust-lang.org/reference/conditional-compilation.html
 pub fn foo() {
