@@ -1,3 +1,16 @@
+// https://doc.rust-lang.org/reference/conditional-compilation.html
+pub fn foo() {
+    let machine_kind = if cfg!(unix) {
+      "unix"
+    } else if cfg!(windows) {
+      "windows"
+    } else {
+      "unknown"
+    };
+    
+    println!("I'm running on a {} machine!", machine_kind);
+}
+
 pub struct Manifest {
     pub name: String,
     pub version: String,
