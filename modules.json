@@ -1,0 +1,49 @@
+{
+    "ezquake": {
+        "id": "ezquake",
+        "name": "ezQuake",
+        "description": "ezQuake is a modern QuakeWorld client that still supports the classic gameplay of the original Quake, QuakeWorld, and Team Fortress.",
+        "website": "https://ezquake.com/",
+        "repo": "https://github.com/QW-Group/ezquake-source",
+        "releases_url": "https://github.com/QW-Group/ezquake-source/releases",
+        "releases": [
+            {
+                "version": "3.6.2",
+                "url": "https://github.com/QW-Group/ezquake-source/releases/tag/3.6.2",
+                "assets": [
+                    { "os": "windows", "url": "ezquake.exe" },
+                    { "os": "linux", "url": "ezQuake-x86_64.AppImage" },
+                    { "os": "mac", "url": "ezquake.app" }
+                ]
+            }
+        ]
+    },
+    "afterquake": {
+        "id": "afterquake",
+        "name": "AfterQuake",
+        "description": "AfterQuake is a QuakeWorld client based on ezQuake 3.2.2.",
+        "website": "",
+        "repo": "",
+        "releases_url": "",
+        "releases": [
+            {
+                "version": "1.0.0",
+                "url": ""
+            }
+        ]
+    },
+    "fte-client": {
+        "id": "fte-client",
+        "name": "FTE",
+        "description": "FTE is a QuakeWorld client with a lot of features.",
+        "website": "https://fte.triptohell.info/",
+        "repo": "",
+        "releases_url": "https://fte.triptohell.info/downloads",
+        "releases": [
+            {
+                "version": "1.0.0",
+                "url": ""
+            }
+        ]
+    }
+}
