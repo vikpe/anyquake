@@ -1,0 +1,18 @@
+{
+  "id": "afterquake",
+  "name": "AfterQuake",
+  "description": "AfterQuake is a QuakeWorld client focused on ease of use and stability. It is based on ezQuake, but with a lot of bugfixes and improvements.",
+  "website": "https://fte.triptohell.info/",
+  "releases": [
+    {
+      "version": "6202",
+      "url": "https://fte.triptohell.info/downloads",
+      "assets": [
+        {
+          "os_arch": "windows.x86_64",
+          "url": "https://fte.triptohell.info/moodles/win64/afterquake.zip"
+        }
+      ]
+    }
+  ]
+}

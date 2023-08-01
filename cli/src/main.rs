@@ -23,7 +23,7 @@ enum Commands {
 }
 
 pub fn get_module_by_id(id: &str) -> Result<Box<dyn ModuleLike + Sync>> {
-    let modules: ModuleCollection = ModuleCollection::new();
+    let modules: ModuleCollection = ModuleCollection {};
 
     return match modules.by_id(id) {
         Some(module) => Ok(module),
@@ -38,7 +38,7 @@ pub fn get_module_by_id(id: &str) -> Result<Box<dyn ModuleLike + Sync>> {
 #[tokio::main]
 async fn main() -> Result<()> {
     let cli = Cli::parse();
-    let modules: ModuleCollection = ModuleCollection::new();
+    let modules: ModuleCollection = ModuleCollection {};
     let result: Result<String, Error> = match &cli.command {
         Some(Commands::Info { module_id: id }) => {
             let info = get_module_by_id(id)?.info().await?;

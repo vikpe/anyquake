@@ -8,19 +8,19 @@ use async_trait::async_trait;
 
 use crate::modules::ModuleLike;
 
-const MODULE_ID: &str = "ezquake";
+const MODULE_ID: &str = "afterquake";
 
 #[derive(Clone)]
-pub struct EzQuake;
+pub struct AfterQuake;
 
 #[async_trait]
-impl ModuleLike for EzQuake {
+impl ModuleLike for AfterQuake {
     fn id(&self) -> String {
         return MODULE_ID.to_string();
     }
 
     fn is_installed(&self) -> bool {
-        self.dir().has_file(&PathBuf::from("ezquake.exe"))
+        self.dir().has_file(&PathBuf::from("afterquake.zip"))
     }
 
     fn uninstall(&self) -> Result<()> {
@@ -28,6 +28,6 @@ impl ModuleLike for EzQuake {
             return Err(anyhow!("{} is not installed", self.id()));
         }
 
-        self.dir().delete_file(&PathBuf::from("ezquake.exe"))
+        self.dir().delete_file(&PathBuf::from("afterquake.zip"))
     }
 }
