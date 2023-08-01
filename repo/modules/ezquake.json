@@ -1,0 +1,22 @@
+{
+  "id": "ezquake",
+  "name": "ezQuake",
+  "description": "ezQuake is a modern QuakeWorld client that still supports the classic gameplay of the original Quake, QuakeWorld, and Team Fortress.",
+  "website": "https://ezquake.com/",
+  "releases": [
+    {
+      "version": "3.6.2",
+      "url": "https://github.com/QW-Group/ezquake-source/releases/tag/3.6.2",
+      "assets": [
+        {
+          "os_arch": "windows.x86_64",
+          "url": "https://github.com/QW-Group/ezquake-source/releases/download/3.6.2/ezquake.exe"
+        },
+        {
+          "os_arch": "linux.x86_64",
+          "url": "https://github.com/QW-Group/ezquake-source/releases/download/3.6.2/ezQuake-x86_64.AppImage"
+        }
+      ]
+    }
+  ]
+}
