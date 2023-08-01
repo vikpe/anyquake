@@ -1,6 +1,6 @@
 extern crate prettytable;
 
-use anyhow::Result;
+use anyhow::{Error, Result};
 use clap::{Parser, Subcommand};
 use prettytable::{Cell, Row, Table};
 
@@ -22,16 +22,16 @@ enum Commands {
     Uninstall { module_id: String },
 }
 
-pub fn get_module_by_id(id: &str) -> Option<Box<dyn ModuleLike + Sync>> {
+pub fn get_module_by_id(id: &str) -> Result<Box<dyn ModuleLike + Sync>> {
     let modules: ModuleCollection = ModuleCollection::new();
 
     return match modules.by_id(id) {
-        Some(module) => Some(module),
-        None => {
-            println!("Module is {} not supported", id);
-            println!("Supported modules: {}", modules.ids().join(", "));
-            return None;
-        }
+        Some(module) => Ok(module),
+        None => Err(anyhow::anyhow!(
+            "Module is {} not supported. Supported modules: {}",
+            id,
+            modules.ids().join(", ")
+        )),
     };
 }
 
@@ -39,33 +39,22 @@ pub fn get_module_by_id(id: &str) -> Option<Box<dyn ModuleLike + Sync>> {
 async fn main() -> Result<()> {
     let cli = Cli::parse();
     let modules: ModuleCollection = ModuleCollection::new();
-
-    match &cli.command {
+    let result: Result<String, Error> = match &cli.command {
         Some(Commands::Info { module_id: id }) => {
-            if let Some(module) = get_module_by_id(id) {
-                let info = module.info().await?;
-                println!("info: {:?}", info);
-            }
+            let info = get_module_by_id(id)?.info().await?;
+            Ok(format!("info: {:?}", info))
         }
         Some(Commands::Versions { module_id: id }) => {
-            if let Some(module) = get_module_by_id(id) {
-                let versions = module.versions().await?;
-                println!("versions: {:?}", versions);
-            }
+            let versions = get_module_by_id(id)?.versions().await?;
+            Ok(format!("versions: {:?}", versions))
         }
         Some(Commands::Install { module_id: id }) => {
-            if let Some(module) = get_module_by_id(id) {
-                if let Err(e) = module.install().await {
-                    println!("{e}")
-                }
-            }
+            get_module_by_id(id)?.install().await?;
+            Ok(format!("successfully installed {}", id))
         }
         Some(Commands::Uninstall { module_id: id }) => {
-            if let Some(module) = get_module_by_id(id) {
-                if let Err(e) = module.uninstall() {
-                    println!("{e}")
-                }
-            }
+            get_module_by_id(id)?.uninstall()?;
+            Ok(format!("successfully uninstalled {}", id))
         }
         Some(Commands::List {}) => {
             let mut table = Table::new();
@@ -79,9 +68,14 @@ async fn main() -> Result<()> {
                     table.add_row(Row::new(vec![Cell::new(&m.id())]));
                 });
 
-            table.printstd();
+            Ok(table.to_string())
         }
-        None => {}
+        None => Err(anyhow::anyhow!("Invalid command.")),
+    };
+
+    match result {
+        Ok(output) => println!("{}", output),
+        Err(error) => println!("{}", error),
     }
 
     Ok(())
