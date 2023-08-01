@@ -55,22 +55,15 @@ async fn main() -> Result<()> {
         }
         Some(Commands::Install { module_id: id }) => {
             if let Some(module) = get_module_by_id(id) {
-                match module.install().await {
-                    Ok(_) => println!("Installed {}!", id),
-                    Err(e) => println!("Failed to install {}! {}", id, e),
+                if let Err(e) = module.install().await {
+                    println!("{e}")
                 }
             }
         }
         Some(Commands::Uninstall { module_id: id }) => {
             if let Some(module) = get_module_by_id(id) {
-                if !module.is_installed() {
-                    println!("Module is {} not installed", id);
-                    return Ok(());
-                }
-
-                match module.uninstall() {
-                    Ok(_) => println!("Uninstalled {}!", id),
-                    Err(e) => println!("Failed to uninstall {}! {}", id, e),
+                if let Err(e) = module.uninstall() {
+                    println!("{e}")
                 }
             }
         }
