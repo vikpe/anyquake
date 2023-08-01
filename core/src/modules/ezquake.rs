@@ -21,7 +21,7 @@ impl ModuleLike for EzQuake {
     }
 
     fn is_installed(&self) -> bool {
-        self.dir().has_file(&PathBuf::from("ezquake_releases.json"))
+        self.dir().has_file(&PathBuf::from("ezquake.exe"))
     }
 
     async fn install(&self) -> Result<()> {
@@ -53,7 +53,6 @@ impl ModuleLike for EzQuake {
             return Err(anyhow!("{} is not installed", self.id()));
         }
 
-        self.dir()
-            .delete_file(&PathBuf::from("ezquake_releases.json"))
+        self.dir().delete_file(&PathBuf::from("ezquake.exe"))
     }
 }
