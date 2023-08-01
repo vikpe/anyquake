@@ -42,11 +42,11 @@ async fn main() -> Result<()> {
     let result: Result<String, Error> = match &cli.command {
         Some(Commands::Info { module_id: id }) => {
             let info = get_module_by_id(id)?.info().await?;
-            Ok(format!("info: {:?}", info))
+            Ok(format!("{} info: {:?}", id, info))
         }
         Some(Commands::Versions { module_id: id }) => {
             let versions = get_module_by_id(id)?.versions().await?;
-            Ok(format!("versions: {:?}", versions))
+            Ok(format!("{} versions: {:?}", id, versions))
         }
         Some(Commands::Install { module_id: id }) => {
             get_module_by_id(id)?.install().await?;
