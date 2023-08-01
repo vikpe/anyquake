@@ -17,6 +17,16 @@
           "url": "https://github.com/QW-Group/ezquake-source/releases/download/3.6.2/ezQuake-x86_64.AppImage"
         }
       ]
+    },
+    {
+      "version": "3.6.1",
+      "url": "https://github.com/QW-Group/ezquake-source/releases/tag/3.6.1",
+      "assets": [
+        {
+          "os_arch": "windows.x86_64",
+          "url": "https://github.com/QW-Group/ezquake-source/releases/download/3.6.1/ezquake_rls_all.exe"
+        }
+      ]
     }
   ]
 }
