@@ -1,5 +1,5 @@
 # anyquake
-> cross-platform Quake installation manager
+> Cross-platform GUI and CLI installer for Quake clients and servers.
 
 
 ## Commands
