@@ -3,9 +3,8 @@ extern crate prettytable;
 use anyhow::Result;
 use clap::{Parser, Subcommand};
 use prettytable::{Cell, Row, Table};
-use tokio;
 
-use anyquake_core::modules::ModuleCollection;
+use anyquake_core::modules::{ModuleCollection, ModuleLike};
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
@@ -17,12 +16,23 @@ struct Cli {
 #[derive(Subcommand)]
 enum Commands {
     List {},
-    Install {
-        module: String,
-    },
-    Uninstall {
-        module: String,
-    },
+    Info { module_id: String },
+    Versions { module_id: String },
+    Install { module_id: String },
+    Uninstall { module_id: String },
+}
+
+pub fn get_module_by_id(id: &str) -> Option<Box<dyn ModuleLike + Sync>> {
+    let modules: ModuleCollection = ModuleCollection::new();
+
+    return match modules.by_id(id) {
+        Some(module) => Some(module),
+        None => {
+            println!("Module is {} not supported", id);
+            println!("Supported modules: {}", modules.ids().join(", "));
+            return None;
+        }
+    };
 }
 
 #[tokio::main]
@@ -31,51 +41,49 @@ async fn main() -> Result<()> {
     let modules: ModuleCollection = ModuleCollection::new();
 
     match &cli.command {
-        Some(Commands::Install { module: name }) => {
-            if let Some(module) = modules.by_id(String::from(name)) {
-                match module.install().await {
-                    Ok(_) => println!("Installed {}[{}]!", name, module.info().id),
-                    Err(e) => println!("Failed to install {}[{}]! {}", name, module.info().id, e),
-                }
-            } else {
-                println!("Module is {} not supported", name);
-                println!("Supported modules: {}", modules.names().join(", "));
+        Some(Commands::Info { module_id: id }) => {
+            if let Some(module) = get_module_by_id(id) {
+                let info = module.info().await?;
+                println!("info: {:?}", info);
             }
         }
-        Some(Commands::Uninstall { module: name }) => {
-            if let Some(module) = modules.by_id(String::from(name)) {
-                match module.uninstall() {
-                    Ok(_) => println!("Uninstalled {}[{}]!", name, module.info().id),
-                    Err(e) => println!("Failed to uninstall {}[{}]! {}", name, module.info().id, e),
+        Some(Commands::Versions { module_id: id }) => {
+            if let Some(module) = get_module_by_id(id) {
+                let versions = module.versions().await?;
+                println!("versions: {:?}", versions);
+            }
+        }
+        Some(Commands::Install { module_id: id }) => {
+            if let Some(module) = get_module_by_id(id) {
+                match module.install().await {
+                    Ok(_) => println!("Installed {}!", id),
+                    Err(e) => println!("Failed to install {}! {}", id, e),
                 }
-            } else {
-                println!("Module is {} not installed", name);
-                let installed_modules: Vec<String> = modules
-                    .into_iter()
-                    .filter(|m| m.is_installed())
-                    .map(|m| m.info().name)
-                    .collect();
+            }
+        }
+        Some(Commands::Uninstall { module_id: id }) => {
+            if let Some(module) = get_module_by_id(id) {
+                if !module.is_installed() {
+                    println!("Module is {} not installed", id);
+                    return Ok(());
+                }
 
-                println!("Installed modules: {}", installed_modules.join(", "));
+                match module.uninstall() {
+                    Ok(_) => println!("Uninstalled {}!", id),
+                    Err(e) => println!("Failed to uninstall {}! {}", id, e),
+                }
             }
         }
         Some(Commands::List {}) => {
             let mut table = Table::new();
 
-            table.add_row(Row::new(vec![
-                Cell::new("name"),
-                Cell::new("description"),
-            ]));
+            table.add_row(Row::new(vec![Cell::new("id")]));
 
-            modules.into_iter()
+            modules
+                .into_iter()
                 .filter(|m| m.is_installed())
                 .for_each(|m| {
-                    let info = &m.info();
-
-                    table.add_row(Row::new(vec![
-                        Cell::new(&info.name),
-                        Cell::new(&info.description),
-                    ]));
+                    table.add_row(Row::new(vec![Cell::new(&m.id())]));
                 });
 
             table.printstd();
@@ -85,4 +93,3 @@ async fn main() -> Result<()> {
 
     Ok(())
 }
-
