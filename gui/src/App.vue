@@ -5,7 +5,6 @@ import Debug from "./components/Debug.vue";
 
 <template>
   <div class="container border-4 border-red-400">
-
     <div class="flex items-center p-4 space-x-4">
       <img alt="anyquake" class="h-24" src="/assets/img/quake_ranger.jpg" />
       <div>
@@ -14,15 +13,15 @@ import Debug from "./components/Debug.vue";
       </div>
     </div>
 
-    <hr class="border-t my-6">
+    <hr class="border-t my-6" />
 
     ezQuake
 
-    <hr class="border-t my-6">
+    <hr class="border-t my-6" />
 
     <Greet />
 
-    <hr class="border-t my-6">
+    <hr class="border-t my-6" />
 
     <Debug />
   </div>

@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { Task, TaskOutcome, TaskStatus } from "./types";
 
 interface Props {
-  task: Task
+  task: Task;
 }
 
 const props = defineProps<Props>();
@@ -13,15 +13,21 @@ const icons = {
   inProgress: "/assets/img/icons8-dots-loading.gif",
   success: "/assets/img/icons8-checked-checkbox-48.png",
   fail: "/assets/img/icons8-close-48.png",
-}
-
+};
 </script>
 <template>
   <pre>{{ JSON.stringify(props, null, 2) }}</pre>
-  <img :src="classNames({
-  [icons.idle]: task.status === TaskStatus.IDLE,
-  [icons.inProgress]: task.status === TaskStatus.IN_PROGRESS,
-  [icons.success]: task.outcome === TaskOutcome.SUCCESS,
-  [icons.fail]: task.outcome === TaskOutcome.FAIL
-  })" class="inline mr-2" height="32" width="32">
+  <img
+    :src="
+      classNames({
+        [icons.idle]: task.status === TaskStatus.IDLE,
+        [icons.inProgress]: task.status === TaskStatus.IN_PROGRESS,
+        [icons.success]: task.outcome === TaskOutcome.SUCCESS,
+        [icons.fail]: task.outcome === TaskOutcome.FAIL,
+      })
+    "
+    class="inline mr-2"
+    height="32"
+    width="32"
+  />
 </template>
