@@ -2574,9 +2574,9 @@ dependencies = [
 
 [[package]]
 name = "rustix"
-version = "0.38.4"
+version = "0.38.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0a962918ea88d644592894bc6dc55acc6c0956488adcebbfb6e273506b7fd6e5"
+checksum = "1ee020b1716f0a80e2ace9b03441a749e402e86712f15f16fe8a8f75afac732f"
 dependencies = [
  "bitflags 2.3.3",
  "errno",
@@ -3194,7 +3194,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-window-state"
 version = "0.1.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v1#ee0d314bb566601f00b2d36962e57a2a916c0932"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v1#cdb77c4b650a81a9c44c4b5db5a46c31954dd7f9"
 dependencies = [
  "bincode",
  "bitflags 2.3.3",
