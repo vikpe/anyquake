@@ -98,6 +98,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "async-trait",
+ "clap",
  "dirs 5.0.1",
  "futures-util",
  "reqwest",
