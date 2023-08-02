@@ -15,12 +15,3 @@ export interface Task {
   outcome: TaskOutcome;
   data: any;
 }
-
-export interface InstallationTask extends Task {
-  data: QuakeInstallation[];
-}
-
-export interface QuakeInstallation {
-  pak0_path: String;
-  root_dir_path: String;
-}

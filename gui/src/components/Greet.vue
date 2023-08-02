@@ -5,8 +5,7 @@ import { invoke } from "@tauri-apps/api/tauri";
 import { fs, os } from "@tauri-apps/api";
 import TaskIcon from "./TaskIcon.vue";
 import {
-  InstallationTask,
-  QuakeInstallation,
+  Task,
   TaskOutcome,
   TaskStatus,
 } from "./types";
@@ -17,7 +16,7 @@ const progressRef = ref({
   totalBytes: 0,
 });
 
-const infoTask = ref<InstallationTask>({
+const infoTask = ref<Task>({
   status: TaskStatus.IDLE,
   outcome: TaskOutcome.UNDEFINED,
   data: [],
@@ -25,9 +24,7 @@ const infoTask = ref<InstallationTask>({
 
 async function onGetInfoClick() {
   infoTask.value.status = TaskStatus.IN_PROGRESS;
-  const result: QuakeInstallation[] = await invoke("get_quake_info", {
-    needle: "pak0.pak",
-  });
+  const result: string[] = await invoke("get_quake_info");
   infoTask.value.data = result;
   infoTask.value.status = TaskStatus.COMPLETED;
   infoTask.value.outcome =

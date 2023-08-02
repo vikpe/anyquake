@@ -1,27 +1,36 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use std::path::PathBuf;
 use serde_json::{json, Value};
 
-use anyquake_core::add;
-
-mod qutil;
+use anyquake_core::qutil;
+use anyquake_core::modules::ModuleLike;
+use anyquake_core::modules::ezquake::EzQuake;
 
 
 #[tauri::command]
 fn get_quake_info() -> Value {
-    println!("elo: {}", add(1, 2));
-    let installations: Vec<qutil::QuakeInstallation> = qutil::get_installations();
+    let installations: Vec<String> = qutil::find_pak0_paths(&PathBuf::from("~"));
     return json!(installations);
 }
+
+#[tauri::command]
+fn install_ezquake() -> Value {
+    let ez = EzQuake{};
+    let res = match ez.uninstall() {
+        Ok(_) => "ok",
+        Err(_) => "not ok",
+    };
+    return json!(res);
+}
+
 
 
 fn main() {
     tauri::Builder::default()
-        .plugin(tauri_plugin_fs_extra::init())
-        .plugin(tauri_plugin_upload::init())
         .plugin(tauri_plugin_window_state::Builder::default().build())
-        .invoke_handler(tauri::generate_handler![get_quake_info])
+        .invoke_handler(tauri::generate_handler![get_quake_info, install_ezquake])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

@@ -3,3 +3,4 @@ pub mod download;
 pub mod fs_extra;
 pub mod modules;
 pub mod repo;
+pub mod qutil;
