@@ -10,7 +10,8 @@ export enum TaskOutcome {
   FAIL = "FAIL",
 }
 
-export interface Task {
+export interface TaskProps {
+  name: string;
   status: TaskStatus;
   outcome: TaskOutcome;
   data: any;

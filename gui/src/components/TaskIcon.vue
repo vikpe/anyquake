@@ -1,9 +1,11 @@
 <script lang="ts" setup>
 import classNames from "classnames";
-import { Task, TaskOutcome, TaskStatus } from "./types";
+import { TaskOutcome, TaskStatus } from "./types";
+import { InvokeTask } from "./task";
+import { UnwrapRef } from "vue";
 
 interface Props {
-  task: Task;
+  task: UnwrapRef<InvokeTask>;
 }
 
 const props = defineProps<Props>();
