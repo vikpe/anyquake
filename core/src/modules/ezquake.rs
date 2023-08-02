@@ -16,7 +16,7 @@ pub struct EzQuake;
 #[async_trait]
 impl ModuleLike for EzQuake {
     fn id(&self) -> String {
-        return MODULE_ID.to_string();
+        MODULE_ID.to_string()
     }
 
     fn is_installed(&self) -> bool {

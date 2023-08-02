@@ -16,7 +16,7 @@ pub struct AfterQuake;
 #[async_trait]
 impl ModuleLike for AfterQuake {
     fn id(&self) -> String {
-        return MODULE_ID.to_string();
+        MODULE_ID.to_string()
     }
 
     fn is_installed(&self) -> bool {

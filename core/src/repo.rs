@@ -26,7 +26,7 @@ pub struct ReleaseAsset {
 }
 
 pub async fn get_module_info(id: &str) -> Result<Module> {
-    let url = String::from(format!("{REPO_URL}/modules/{id}.json"));
+    let url = format!("{REPO_URL}/modules/{id}.json");
     let info = reqwest::get(&url).await?.json::<Module>().await?;
     Ok(info)
 }

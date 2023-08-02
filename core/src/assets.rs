@@ -1,5 +1,5 @@
 use std::fs;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use anyhow::{anyhow, Result};
 
@@ -12,11 +12,11 @@ pub struct RestrictedDir {
 }
 
 impl RestrictedDir {
-    pub fn new(path: &PathBuf) -> Self {
-        Self { path: path.clone() }
+    pub fn new(path: &Path) -> Self {
+        Self { path: path.to_path_buf() }
     }
 
-    pub fn validate_path(&self, path: &PathBuf) -> Result<()> {
+    pub fn validate_path(&self, path: &Path) -> Result<()> {
         match path.starts_with(&self.path) {
             true => Ok(()),
             false => Err(anyhow!(
@@ -61,6 +61,6 @@ impl RestrictedDir {
         self.create_dir(dest)?;
         println!("Downloading '{}' to '{}'", url, path_abs.display());
 
-        download(&url, &path_abs).await
+        download(url, &path_abs).await
     }
 }
