@@ -1,4 +1,5 @@
 pub mod assets;
+pub mod commands;
 pub mod download;
 pub mod fs_extra;
 pub mod modules;

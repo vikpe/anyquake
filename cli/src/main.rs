@@ -1,25 +1,17 @@
 extern crate prettytable;
 
 use anyhow::{Error, Result, anyhow};
-use clap::{Parser, Subcommand};
+use clap::{Parser};
 use prettytable::{Cell, Row, Table};
 
 use anyquake_core::modules::{ModuleCollection, ModuleLike};
+use anyquake_core::commands::{Command};
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
 struct Cli {
     #[command(subcommand)]
-    command: Option<Commands>,
-}
-
-#[derive(Subcommand)]
-enum Commands {
-    List {},
-    Info { module_id: String },
-    Versions { module_id: String },
-    Install { module_id: String },
-    Uninstall { module_id: String },
+    command: Option<Command>,
 }
 
 pub fn get_module_by_id(id: &str) -> Result<Box<dyn ModuleLike + Sync>> {
@@ -40,23 +32,23 @@ async fn main() -> Result<()> {
     let cli = Cli::parse();
     let modules: ModuleCollection = ModuleCollection {};
     let result: Result<String, Error> = match &cli.command {
-        Some(Commands::Info { module_id: id }) => {
+        Some(Command::Info { module_id: id }) => {
             let info = get_module_by_id(id)?.info().await?;
             Ok(format!("{} info: {:?}", id, info))
         }
-        Some(Commands::Versions { module_id: id }) => {
+        Some(Command::Versions { module_id: id }) => {
             let versions = get_module_by_id(id)?.versions().await?;
             Ok(format!("{} versions: {:?}", id, versions))
         }
-        Some(Commands::Install { module_id: id }) => {
+        Some(Command::Install { module_id: id }) => {
             get_module_by_id(id)?.install().await?;
             Ok(format!("successfully installed {}", id))
         }
-        Some(Commands::Uninstall { module_id: id }) => {
+        Some(Command::Uninstall { module_id: id }) => {
             get_module_by_id(id)?.uninstall()?;
             Ok(format!("successfully uninstalled {}", id))
         }
-        Some(Commands::List {}) => {
+        Some(Command::List {}) => {
             let mut table = Table::new();
 
             table.add_row(Row::new(vec![Cell::new("id")]));
