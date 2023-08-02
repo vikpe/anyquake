@@ -23,11 +23,12 @@ impl ModuleLike for EzQuake {
         self.dir().has_file(&PathBuf::from("ezquake.exe"))
     }
 
-    fn uninstall(&self) -> Result<()> {
+    fn uninstall(&self) -> Result<String> {
         if !self.is_installed() {
             return Err(anyhow!("{} is not installed", self.id()));
         }
 
-        self.dir().delete_file(&PathBuf::from("ezquake.exe"))
+        self.dir().delete_file(&PathBuf::from("ezquake.exe"))?;
+        Ok(format!("Successfully uninstalled {}", self.id()))
     }
 }

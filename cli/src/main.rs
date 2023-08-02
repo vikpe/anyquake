@@ -1,11 +1,11 @@
 extern crate prettytable;
 
-use anyhow::{Error, Result, anyhow};
-use clap::{Parser};
+use anyhow::{anyhow, Error, Result};
+use clap::Parser;
 use prettytable::{Cell, Row, Table};
 
-use anyquake_core::modules::{ModuleCollection, ModuleLike};
-use anyquake_core::commands::{Command};
+use anyquake_core::commands::Command;
+use anyquake_core::modules::ModuleCollection;
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
@@ -14,39 +14,24 @@ struct Cli {
     command: Option<Command>,
 }
 
-pub fn get_module_by_id(id: &str) -> Result<Box<dyn ModuleLike + Sync>> {
-    let modules: ModuleCollection = ModuleCollection {};
-
-    return match modules.by_id(id) {
-        Some(module) => Ok(module),
-        None => Err(anyhow!(
-            "Module is {} not supported. Supported modules: {}",
-            id,
-            modules.ids().join(", ")
-        )),
-    };
-}
-
 #[tokio::main]
 async fn main() -> Result<()> {
     let cli = Cli::parse();
     let modules: ModuleCollection = ModuleCollection {};
     let result: Result<String, Error> = match &cli.command {
         Some(Command::Info { module_id: id }) => {
-            let info = get_module_by_id(id)?.info().await?;
+            let info = modules.by_id(id)?.info().await?;
             Ok(format!("{} info: {:?}", id, info))
         }
         Some(Command::Versions { module_id: id }) => {
-            let versions = get_module_by_id(id)?.versions().await?;
+            let versions = modules.by_id(id)?.versions().await?;
             Ok(format!("{} versions: {:?}", id, versions))
         }
         Some(Command::Install { module_id: id }) => {
-            get_module_by_id(id)?.install().await?;
-            Ok(format!("successfully installed {}", id))
+            modules.by_id(id)?.install().await
         }
         Some(Command::Uninstall { module_id: id }) => {
-            get_module_by_id(id)?.uninstall()?;
-            Ok(format!("successfully uninstalled {}", id))
+            modules.by_id(id)?.uninstall()
         }
         Some(Command::List {}) => {
             let mut table = Table::new();

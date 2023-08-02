@@ -10,7 +10,12 @@
     .debug {
         border: 1px solid cyan;
     }
+
     .debug > * {
         border: 1px solid magenta;
+    }
+
+    hr {
+        @apply border-white/30 my-4;
     }
 }

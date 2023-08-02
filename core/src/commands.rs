@@ -9,3 +9,15 @@ pub enum Command {
     Install { module_id: String },
     Uninstall { module_id: String },
 }
+
+impl std::string::ToString for Command {
+    fn to_string(&self) -> String {
+        match self {
+            Command::List {} => "list".into(),
+            Command::Info { module_id: id } => format!("info {}", id),
+            Command::Versions { module_id: id } => format!("versions {}", id),
+            Command::Install { module_id: id } => format!("install {}", id),
+            Command::Uninstall { module_id: id } => format!("uninstall {}", id),
+        }
+    }
+}

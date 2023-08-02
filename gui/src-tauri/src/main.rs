@@ -3,33 +3,47 @@
 
 use std::path::PathBuf;
 
-use serde_json::{json, Value};
+use anyhow::{anyhow, Result as AnyhowResult};
+use serde_json::Value;
 
-use anyquake_core::modules::ezquake::EzQuake;
-use anyquake_core::modules::ModuleLike;
+use anyquake_core::commands::Command;
+use anyquake_core::modules::ModuleCollection;
 use anyquake_core::qutil;
 
 #[tauri::command]
 fn get_quake_info() -> Value {
     let installations: Vec<String> = qutil::find_pak0_paths(&PathBuf::from("~"));
-    return json!(installations);
+    installations.into()
 }
 
 #[tauri::command]
-fn uninstall_ezquake() -> Value {
-    let ez = EzQuake {};
-    let res: String = match ez.uninstall() {
-        Ok(_) => String::from("ok"),
-        Err(err) => String::from(err.to_string()),
-    };
-    return json!(res);
+async fn anyquake_command(command: Command) -> String {
+    match process_anyquake_command(command).await {
+        Ok(output) => output,
+        Err(error) => format!("{}", error),
+    }
 }
 
+async fn process_anyquake_command(command: Command) -> AnyhowResult<String> {
+    let modules: ModuleCollection = ModuleCollection {};
+    match command {
+        Command::Install { module_id: id } => {
+            modules.by_id(&id)?.install().await
+        }
+        Command::Uninstall { module_id: id } => {
+            modules.by_id(&id)?.uninstall()
+        }
+        _ => {
+            Err(anyhow!("Invalid command."))
+        }
+    }
+}
 
-fn main() {
+#[tokio::main]
+async fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_window_state::Builder::default().build())
-        .invoke_handler(tauri::generate_handler![get_quake_info, uninstall_ezquake])
+        .invoke_handler(tauri::generate_handler![anyquake_command, get_quake_info])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

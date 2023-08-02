@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import Greet from "./components/Greet.vue";
+import Modules from "./components/Modules.vue";
 import Debug from "./components/Debug.vue";
 </script>
 
@@ -13,15 +13,15 @@ import Debug from "./components/Debug.vue";
       </div>
     </div>
 
-    <hr class="border-t my-6" />
+    <hr />
 
     ezQuake
 
-    <hr class="border-t my-6" />
+    <hr />
 
-    <Greet />
+    <Modules />
 
-    <hr class="border-t my-6" />
+    <hr />
 
     <Debug />
   </div>

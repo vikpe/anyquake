@@ -36,7 +36,7 @@ pub trait ModuleLike {
             .collect()
     }
     fn is_installed(&self) -> bool;
-    async fn install(&self) -> Result<()> {
+    async fn install(&self) -> Result<String> {
         if self.is_installed() {
             return Err(anyhow!("{} is already installed", self.id()));
         }
@@ -55,21 +55,21 @@ pub trait ModuleLike {
                 self.dir()
                     .download(&first_asset.url, &PathBuf::from(""))
                     .await?;
-                return Ok(());
+                return Ok(format!("Successfully installed {}", self.id()));
             }
         }
     }
-    fn uninstall(&self) -> Result<()>;
+    fn uninstall(&self) -> Result<String>;
 }
 
 pub struct ModuleCollection;
 
 impl ModuleCollection {
-    pub fn all(&self) -> Vec<Box<dyn ModuleLike + Sync>> {
+    pub fn all(&self) -> Vec<Box<dyn ModuleLike + Sync + Send>> {
         vec![Box::new(AfterQuake {}), Box::new(EzQuake {})]
     }
 
-    pub fn into_iter(&self) -> IntoIter<Box<dyn ModuleLike + Sync>> {
+    pub fn into_iter(&self) -> IntoIter<Box<dyn ModuleLike + Sync + Send>> {
         self.all().into_iter()
     }
 
@@ -77,7 +77,14 @@ impl ModuleCollection {
         self.into_iter().map(|m| m.id()).collect()
     }
 
-    pub fn by_id(&self, id: &str) -> Option<Box<dyn ModuleLike + Sync>> {
-        self.into_iter().find(|m| m.id() == id)
+    pub fn by_id(&self, id: &str) -> Result<Box<dyn ModuleLike + Sync + Send>> {
+        return match self.into_iter().find(|m| m.id() == id) {
+            Some(module) => Ok(module),
+            None => Err(anyhow!(
+                "Module is {} not supported. Supported modules: {}",
+                id,
+                self.ids().join(", ")
+            )),
+        };
     }
 }

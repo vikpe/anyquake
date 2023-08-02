@@ -23,11 +23,12 @@ impl ModuleLike for AfterQuake {
         self.dir().has_file(&PathBuf::from("afterquake.zip"))
     }
 
-    fn uninstall(&self) -> Result<()> {
+    fn uninstall(&self) -> Result<String> {
         if !self.is_installed() {
             return Err(anyhow!("{} is not installed", self.id()));
         }
 
-        self.dir().delete_file(&PathBuf::from("afterquake.zip"))
+        self.dir().delete_file(&PathBuf::from("afterquake.zip"))?;
+        Ok(format!("Successfully uninstalled {}", self.id()))
     }
 }
