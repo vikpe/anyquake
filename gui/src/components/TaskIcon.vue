@@ -1,11 +1,10 @@
 <script lang="ts" setup>
 import classNames from "classnames";
 import { TaskOutcome, TaskStatus } from "./types";
-import { InvokeTask } from "./task";
-import { UnwrapRef } from "vue";
 
 interface Props {
-  task: UnwrapRef<InvokeTask>;
+  status: TaskStatus;
+  outcome: TaskOutcome;
 }
 
 const props = defineProps<Props>();
@@ -18,14 +17,14 @@ const icons = {
 };
 </script>
 <template>
-  <pre>{{ JSON.stringify(props, null, 2) }}</pre>
+  <!--  <pre>{{ JSON.stringify(props, null, 2) }}</pre>-->
   <img
     :src="
       classNames({
-        [icons.idle]: task.status === TaskStatus.IDLE,
-        [icons.inProgress]: task.status === TaskStatus.IN_PROGRESS,
-        [icons.success]: task.outcome === TaskOutcome.SUCCESS,
-        [icons.fail]: task.outcome === TaskOutcome.FAIL,
+        [icons.idle]: status === TaskStatus.IDLE,
+        [icons.inProgress]: status === TaskStatus.IN_PROGRESS,
+        [icons.success]: outcome === TaskOutcome.SUCCESS,
+        [icons.fail]: outcome === TaskOutcome.FAIL,
       })
     "
     class="inline mr-2"

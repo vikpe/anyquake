@@ -15,10 +15,6 @@ import Debug from "./components/Debug.vue";
 
     <hr />
 
-    ezQuake
-
-    <hr />
-
     <Modules />
 
     <hr />

@@ -63,6 +63,7 @@ function runCommand(name, module_id) {
   <table class="min-w-[500px] text-left border">
     <thead>
       <tr>
+        <th class="p-2"></th>
         <th class="p-2">Command</th>
         <th class="p-2">Module</th>
         <th class="p-2">Status</th>
@@ -71,12 +72,18 @@ function runCommand(name, module_id) {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="task in tasks.slice().reverse()">
-        <td class="p-2">{{ task.command.name }}</td>
-        <td class="p-2">{{ task.command.module_id }}</td>
-        <td class="p-2">{{ task.status }}</td>
-        <td class="p-2">{{ task.outcome }}</td>
-        <td class="p-2">{{ JSON.stringify(task.data, null, 2) }}</td>
+      <tr
+        v-for="task in tasks.slice().reverse()"
+        class="odd:bg-white/10 text-sm"
+      >
+        <td class="px-2 py-1">
+          <TaskIcon :status="task.status" :outcome="task.outcome" />
+        </td>
+        <td class="px-2 py-1">{{ task.command.name }}</td>
+        <td class="px-2 py-1">{{ task.command.module_id }}</td>
+        <td class="px-2 py-1">{{ task.status }}</td>
+        <td class="px-2 py-1">{{ task.outcome }}</td>
+        <td class="px-2 py-1">{{ JSON.stringify(task.data, null, 2) }}</td>
       </tr>
     </tbody>
   </table>
@@ -90,7 +97,7 @@ function runCommand(name, module_id) {
 
     <hr />
 
-    <TaskIcon :task="infoTask" />
+    <TaskIcon :status="infoTask.status" :outcome="infoTask.outcome" />
     <span class="font-bold">QuakeDirPath</span>:
     <span class="font-mono">{{ JSON.stringify(infoTask.data, null, 2) }}</span>
   </div>
