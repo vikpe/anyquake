@@ -1,6 +1,6 @@
 extern crate prettytable;
 
-use anyhow::{Error, Result};
+use anyhow::{Error, Result, anyhow};
 use clap::{Parser, Subcommand};
 use prettytable::{Cell, Row, Table};
 
@@ -27,7 +27,7 @@ pub fn get_module_by_id(id: &str) -> Result<Box<dyn ModuleLike + Sync>> {
 
     return match modules.by_id(id) {
         Some(module) => Ok(module),
-        None => Err(anyhow::anyhow!(
+        None => Err(anyhow!(
             "Module is {} not supported. Supported modules: {}",
             id,
             modules.ids().join(", ")
@@ -70,7 +70,7 @@ async fn main() -> Result<()> {
 
             Ok(table.to_string())
         }
-        None => Err(anyhow::anyhow!("Invalid command.")),
+        None => Err(anyhow!("Invalid command.")),
     };
 
     match result {
