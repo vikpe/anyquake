@@ -8,8 +8,6 @@ anyquake list
 anyquake install <module>
 anyquake install <module>@<version>
 anyquake versions <module>
-anyquake backup <module>
-anyquake restore <module>
 anyquake update all
 anyquake update <module>
 ```
