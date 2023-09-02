@@ -1,5 +1,3 @@
-extern crate dirs;
-
 use std::path::Path;
 use std::string::ToString;
 
