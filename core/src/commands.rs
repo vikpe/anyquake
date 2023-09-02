@@ -1,3 +1,5 @@
+use std::fmt::Formatter;
+
 use clap;
 use serde;
 
@@ -10,14 +12,14 @@ pub enum Command {
     Uninstall { module_id: String },
 }
 
-impl std::string::ToString for Command {
-    fn to_string(&self) -> String {
+impl std::fmt::Display for Command {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
-            Command::List {} => "list".into(),
-            Command::Info { module_id: id } => format!("info {}", id),
-            Command::Versions { module_id: id } => format!("versions {}", id),
-            Command::Install { module_id: id } => format!("install {}", id),
-            Command::Uninstall { module_id: id } => format!("uninstall {}", id),
+            Command::List {} => write!(f, "list"),
+            Command::Info { module_id: id } => write!(f, "info {}", id),
+            Command::Versions { module_id: id } => write!(f, "versions {}", id),
+            Command::Install { module_id: id } => write!(f, "install {}", id),
+            Command::Uninstall { module_id: id } => write!(f, "uninstall {}", id),
         }
     }
 }
