@@ -4,18 +4,18 @@ use std::vec::IntoIter;
 use anyhow::{anyhow, Result};
 use async_trait::async_trait;
 
-use crate::assets::RestrictedDir;
+use crate::anyquake;
 use crate::modules::afterquake::AfterQuake;
 use crate::modules::ezquake::EzQuake;
 use crate::repo;
 use crate::repo::{Module, Release, ReleaseAsset};
+use crate::restricted_dir::RestrictedDir;
 
 pub mod afterquake;
 pub mod ezquake;
 
-pub fn get_module_dir(id: &str) -> RestrictedDir {
-    let anyquake_path = Path::new("/home/vikpe/anyquake");
-    RestrictedDir::new(&anyquake_path.join(id))
+pub fn get_module_dir(module_id: &str) -> RestrictedDir {
+    RestrictedDir::new(&anyquake::get_root_dir_path().join(module_id))
 }
 
 #[async_trait]
