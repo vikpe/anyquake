@@ -11,7 +11,7 @@ pub fn create_dir_all(path: &Path) -> Result<()> {
 }
 
 pub fn write_file(dir_path: &Path, filename: &str, content: &str) -> Result<()> {
-    create_dir_all(&dir_path)?;
+    create_dir_all(dir_path)?;
     let file_path = dir_path.join(filename);
     fs::write(file_path, content)?;
     Ok(())

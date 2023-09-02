@@ -52,9 +52,7 @@ pub trait ModuleLike {
                     .assets
                     .first()
                     .ok_or(anyhow!("No assets found"))?;
-                self.dir()
-                    .download(&first_asset.url, &Path::new(""))
-                    .await?;
+                self.dir().download(&first_asset.url, Path::new("")).await?;
                 return Ok(format!("Successfully installed {}", self.id()));
             }
         }
