@@ -1,6 +1,6 @@
 extern crate dirs;
 
-use std::path::PathBuf;
+use std::path::Path;
 use std::string::ToString;
 
 use anyhow::{anyhow, Result};
@@ -20,7 +20,7 @@ impl ModuleLike for EzQuake {
     }
 
     fn is_installed(&self) -> bool {
-        self.dir().has_file(&PathBuf::from("ezquake.exe"))
+        self.dir().has_file(&Path::new("ezquake.exe"))
     }
 
     fn uninstall(&self) -> Result<String> {
@@ -28,7 +28,7 @@ impl ModuleLike for EzQuake {
             return Err(anyhow!("{} is not installed", self.id()));
         }
 
-        self.dir().delete_file(&PathBuf::from("ezquake.exe"))?;
+        self.dir().delete_file(&Path::new("ezquake.exe"))?;
         Ok(format!("Successfully uninstalled {}", self.id()))
     }
 }

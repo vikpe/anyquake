@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::path::Path;
 use std::vec::IntoIter;
 
 use anyhow::{anyhow, Result};
@@ -14,7 +14,7 @@ pub mod afterquake;
 pub mod ezquake;
 
 pub fn get_module_dir(id: &str) -> RestrictedDir {
-    let anyquake_path = PathBuf::from("/home/vikpe/anyquake");
+    let anyquake_path = Path::new("/home/vikpe/anyquake");
     RestrictedDir::new(&anyquake_path.join(id))
 }
 
@@ -53,7 +53,7 @@ pub trait ModuleLike {
                     .first()
                     .ok_or(anyhow!("No assets found"))?;
                 self.dir()
-                    .download(&first_asset.url, &PathBuf::from(""))
+                    .download(&first_asset.url, &Path::new(""))
                     .await?;
                 return Ok(format!("Successfully installed {}", self.id()));
             }

@@ -13,7 +13,9 @@ pub struct RestrictedDir {
 
 impl RestrictedDir {
     pub fn new(path: &Path) -> Self {
-        Self { path: path.to_path_buf() }
+        Self {
+            path: path.to_path_buf(),
+        }
     }
 
     pub fn validate_path(&self, path: &Path) -> Result<()> {
@@ -26,15 +28,15 @@ impl RestrictedDir {
         }
     }
 
-    pub fn get_abs_path_to(&self, path: &PathBuf) -> PathBuf {
+    pub fn get_abs_path_to(&self, path: &Path) -> PathBuf {
         self.path.join(path)
     }
 
-    pub fn has_file(&self, path: &PathBuf) -> bool {
+    pub fn has_file(&self, path: &Path) -> bool {
         self.get_abs_path_to(path).is_file()
     }
 
-    pub fn delete_file(&self, file_path: &PathBuf) -> Result<()> {
+    pub fn delete_file(&self, file_path: &Path) -> Result<()> {
         if !self.has_file(file_path) {
             return Ok(());
         }
@@ -46,14 +48,14 @@ impl RestrictedDir {
         Ok(())
     }
 
-    pub fn create_dir(&self, path: &PathBuf) -> Result<()> {
+    pub fn create_dir(&self, path: &Path) -> Result<()> {
         let path_abs = self.get_abs_path_to(path);
         self.validate_path(&path_abs)?;
 
         fs_extra::create_dir_all(&path_abs)
     }
 
-    pub async fn download(&self, url: &str, dest: &PathBuf) -> Result<()> {
+    pub async fn download(&self, url: &str, dest: &Path) -> Result<()> {
         let path_abs = self.get_abs_path_to(dest);
         self.validate_path(&path_abs)?;
 

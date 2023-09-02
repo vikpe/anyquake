@@ -1,4 +1,4 @@
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 use rust_search::SearchBuilder;
 
@@ -10,6 +10,6 @@ pub fn find_pak0_paths(path: &Path) -> Vec<String> {
         .strict()
         .limit(11)
         .build()
-        .filter(|p| PathBuf::from(p).is_file())
+        .filter(|p| Path::new(p).is_file())
         .collect()
 }
